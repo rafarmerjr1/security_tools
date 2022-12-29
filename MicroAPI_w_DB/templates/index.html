@@ -9,13 +9,29 @@
         <th>Primary Key</th>
         <th>Field 1</th>
         <th>Field 2</th>
+        <th>Delete</th>
     </tr>
     {% for row in results %}  
     <tr>
         <td> {{ row[0] }} </td>
         <td> {{ row[1] }} </td>
         <td> {{ row[2] }} </td>
+        <td> <button type="button" id="btn" name={{row[0]}} onclick="deleteRow(name)">x</button> </td>
     </tr>
+
+    <script>
+        function deleteRow(name){
+            console.log(name)
+            let body = { "key": name }
+            fetch('/delete',{
+                method:"POST",
+                headers: {
+                "Content-Type":"application/json"
+                },
+                body: JSON.stringify(body)
+            })
+        }
+    </script>
 
     {% endfor %}
 </table>

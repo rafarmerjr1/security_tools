@@ -93,6 +93,18 @@ class Database():
         except:
             return False
 
+    def delete_row_by_id(self, conn, key):
+        table_query = """DELETE FROM webscrape WHERE id=?;"""
+        key = str(key)
+        try:
+            c = conn.cursor()
+            c.execute(table_query, (key,))
+            conn.commit()
+            return True
+        except:
+            return False
+    
+
 
 ##########################################
 # Main function calls if called directly #

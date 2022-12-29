@@ -6,7 +6,7 @@ requests with a malicious file, and accepting POST requests.  POST requests inte
 
 Useful for offensive operations - specifically XSS or any other attack path that can induce HTTP requests from a victim web server. The database and POST request routing are configured to accept usernames and user tokens/cookies, and store them locally in a database for future use.  
 
-With some slight tweaks, can also be used to conduct various kinds of webscraping.  
+With some slight changes, can also be used to conduct various kinds of webscraping.  
 
 Malicious JS files not included in repo currently.  
 
@@ -24,6 +24,7 @@ options:
 ### Steps to use
 Run `python3 microAPI.py --new` to start the API for the first time. This will create a new SQLite object recording data into 'user_data_store.db'. At this point, a simple request like `curl http://{URL}:{PORT}/tokens -X POST -d "user=Foo&token=Bar"` should be enough to confirm that the API is accepting POST traffic and logging to the database.  
 
+### Viewing Results
 Results can be viewed at the '/results' endpoint in a browser.  
 
 ### Use an existing or new .db file

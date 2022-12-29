@@ -1,6 +1,7 @@
-from flask import Flask, send_file, make_response, request, render_template
+from flask import Flask, send_file, make_response, request, render_template, redirect, json
 from database import Database as database_obj
 import argparse
+import sys
 
 app = Flask(__name__)
 
@@ -36,8 +37,23 @@ def eviljs():
 def home():
     results = db_obj.get_table(conn)
     return render_template('index.html',
-    results = results
+    results = results,
+    code=200
     )
+
+# Delete a row
+@app.route('/delete', methods=(["POST"]))
+def delete():
+    try:
+        req = request.json
+        key = req['key']
+        db_obj.delete_row_by_id(conn, key)
+        print("Received Delete Request for row " + key)
+        return redirect('/results', code=302)
+    except:
+        print("Error in Delete API endpoint." + key)
+        return redirect('/results', code=302)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -72,4 +88,4 @@ if __name__ == "__main__":
     
     
     
-    app.run(host='127.0.0.1', port=8080)
+    app.run(host='127.0.0.1', port=8080, debug=True)

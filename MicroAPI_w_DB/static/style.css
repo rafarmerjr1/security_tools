@@ -1,16 +1,235 @@
+/* Simple.css
+https://github.com/kevquirk/simple.css/blob/main/simple-v1.css */
 
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+:root {
+  /* Set sans-serif & mono fonts */
+  --sans-font: -apple-system, BlinkMacSystemFont, "Avenir Next", Avenir,
+    "Nimbus Sans L", Roboto, Noto, "Segoe UI", Arial, Helvetica,
+    "Helvetica Neue", sans-serif;
+  --mono-font: Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+
+  /* Body font size. By default, effectively 18.4px, based on 16px as 'root em' */
+  --base-fontsize: 1.15rem;
+
+  /* Major third scale progression - see https://type-scale.com/ */
+  --header-scale: 1.25;
+
+  /* Line height is set to the "Golden ratio" for optimal legibility */
+  --line-height: 1.618;
+
+  /* Default (dark) theme */
+  --bg: #212121;
+  --accent-bg: #2b2b2b;
+  --text: #dcdcdc;
+  --text-light: #ababab;
+  --border: #666;
+  --accent: #ffb300;
+  --accent-light: #ffecb3;
+  --code: #f06292;
+  --preformatted: #ccc;
+  --disabled: #111;
 }
 
-td, th {
-  border: 1px solid #dddddd;
+html {
+  /* Set the font globally */
+  font-family: var(--sans-font);
+}
+
+/* Make the body a nice central block */
+body {
+  color: var(--text);
+  background: var(--bg);
+  font-size: var(--base-fontsize);
+  line-height: var(--line-height);
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  flex: 1;
+  margin: 0 auto;
+  max-width: 45rem;
+  padding: 0 0.5rem;
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Make the header bg full width, but the content inline with body */
+header {
+  background: var(--accent-bg);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  padding: 2rem 0.5rem;
+  width: 100vw;
+  position: relative;
+  box-sizing: border-box;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+/* Remove margins for header text */
+header h1,
+header p {
+  margin: 0;
+}
+
+/* Add a little padding to ensure spacing is correct between content and nav */
+main {
+  padding-top: 1.5rem;
+}
+
+/* Fix line height when title wraps */
+h1,
+h2,
+h3 {
+  line-height: 1.1;
+}
+
+/* Format tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+td,
+th {
+  border: 1px solid var(--border);
   text-align: left;
-  padding: 8px;
+  padding: 0.5rem;
+}
+
+th {
+  background: var(--accent-bg);
+  font-weight: bold;
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+  /* Set every other cell slightly darker. Improves readability. */
+  background: var(--accent-bg);
+}
+
+table caption {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Lists */
+ol,
+ul {
+  padding-left: 3rem;
+}
+
+/* Format headers */
+h1 {
+  font-size: calc(
+    var(--base-fontsize) * var(--header-scale) * var(--header-scale) *
+      var(--header-scale) * var(--header-scale)
+  );
+  margin-top: calc(var(--line-height) * 1.5rem);
+}
+
+h2 {
+  font-size: calc(
+    var(--base-fontsize) * var(--header-scale) * var(--header-scale) *
+      var(--header-scale)
+  );
+  margin-top: calc(var(--line-height) * 1.5rem);
+}
+
+h3 {
+  font-size: calc(
+    var(--base-fontsize) * var(--header-scale) * var(--header-scale)
+  );
+  margin-top: calc(var(--line-height) * 1.5rem);
+}
+
+h4 {
+  font-size: calc(var(--base-fontsize) * var(--header-scale));
+  margin-top: calc(var(--line-height) * 1.5rem);
+}
+
+h5 {
+  font-size: var(--base-fontsize);
+  margin-top: calc(var(--line-height) * 1.5rem);
+}
+
+h6 {
+  font-size: calc(var(--base-fontsize) / var(--header-scale));
+  margin-top: calc(var(--line-height) * 1.5rem);
+}
+
+/* Format links & buttons */
+a,
+a:visited {
+  color: var(--accent);
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a button,
+button,
+[role="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  border: none;
+  border-radius: 5px;
+  background: var(--accent);
+  font-size: 1rem;
+  color: var(--bg);
+  padding: 0.5rem 0.9rem;
+  margin: 0.5rem 0;
+  transition: 0.4s;
+}
+
+a button[disabled],
+button[disabled],
+[role="button"][aria-disabled="true"],
+input[type="submit"][disabled],
+input[type="reset"][disabled],
+input[type="button"][disabled],
+input[type="checkbox"][disabled],
+input[type="radio"][disabled],
+select[disabled] {
+  cursor: default;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  cursor: not-allowed;
+  background-color: var(--disabled);
+}
+
+input[type="range"] {
+  padding: 0;
+}
+
+/* Set the cursor to '?' while hovering over an abbreviation */
+abbr {
+  cursor: help;
+}
+
+button:focus,
+button:enabled:hover,
+[role="button"]:focus,
+[role="button"]:not([aria-disabled="true"]):hover,
+input[type="submit"]:focus,
+input[type="submit"]:enabled:hover,
+input[type="reset"]:focus,
+input[type="reset"]:enabled:hover,
+input[type="button"]:focus,
+input[type="button"]:enabled:hover,
+input[type="checkbox"]:focus,
+input[type="checkbox"]:enabled:hover,
+input[type="radio"]:focus,
+input[type="radio"]:enabled:hover {
+  filter: brightness(1.4);
+  cursor: pointer;
 }
