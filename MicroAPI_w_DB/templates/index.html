@@ -1,0 +1,23 @@
+{% extends "base.html" %}  
+
+{% block content %}  
+
+<h1>HTTP API Results</h1>
+
+<table>
+    <tr>
+        <th>Primary Key</th>
+        <th>Field 1</th>
+        <th>Field 2</th>
+    </tr>
+    {% for row in results %}  
+    <tr>
+        <td> {{ row[0] }} </td>
+        <td> {{ row[1] }} </td>
+        <td> {{ row[2] }} </td>
+    </tr>
+
+    {% endfor %}
+</table>
+
+{% endblock %}
