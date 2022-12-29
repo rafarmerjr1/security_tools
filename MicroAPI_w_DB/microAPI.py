@@ -6,7 +6,6 @@ app = Flask(__name__)
 
 # Commit users and tokens to DB. Note the URL is "/tokens".
 # curl http://{URL}:{PORT}/tokens -X POST -d "user=Foo&token=Bar"
-
 @app.route('/tokens', methods=['POST'])
 def tokensjs():
     f = request.form
