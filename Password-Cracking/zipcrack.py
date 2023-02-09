@@ -13,7 +13,7 @@ class ZipCrack:
     If length of password is unknown, pass the callable into a range:
 
         crack_it = ZipCrack('protected.zip')
-        for i in range(8,16):
+        for i in range(8,17):
             crack_it(i)
 
     Args:
@@ -88,11 +88,18 @@ class TestZip:
         pyminizip.compress('test.txt', None, './zippedTest.zip', pw, 0)
     
 # Quick Test
-#def tests():
-#    crack=ZipCrack()
-#    TestZip.test_zip('bcb')
-#
-#    crack.zippedContents('zippedTest.zip')
-#    crack.zipCrack('zippedTest.zip',3)
-#
+def test():
+    crack=ZipCrack()
+    TestZip.test_zip('bcb')
+
+    crack.zippedContents('zippedTest.zip')
+    crack.zipCrack('zippedTest.zip',3)
+
+# testing callable instance
+def iter_test():
+    crack=ZipCrack('zippedTest.zip')
+    TestZip.test_zip('bcb')
+    for i in range(2,4):
+        crack(i)
 #tests()
+#iter_test()
