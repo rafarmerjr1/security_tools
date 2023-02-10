@@ -11,8 +11,6 @@ Parent class should be capable of accepting filetype-specific methods for openin
 files during brute force operation.
 Specifically - processor and extractor will vary based on what kind of file is being opened. 
 """
-
-
 class PasswordCrack:
     def __init__(self, file=None, pw_length=None):
         self.charlist = [chr for chr in self.chr_list_creator()]
@@ -25,7 +23,8 @@ class PasswordCrack:
         raise NotImplementedError
 
     def chr_list_creator(self, start=32, end=126):
-        """Generates list of characters to use against password"""
+        """Generates list of characters to use against password
+        Very Heavy.  Use with Caution."""
         for i in range(start,end):
             yield chr(i)
 
@@ -49,50 +48,55 @@ class PasswordCrack:
                     except:
                         pass
         if found == False:
-            print('Password not discovered on this iteration.')
+            return None
         else:
-            print(f'Password identified: {pw}\n')
-            return self.reader(self.contents)
+            return pw
 
 
 class ZipCrack(PasswordCrack):
-    """To use as a callable:
-            crack_it = ZipCrack('protected.zip', 8)
-            crack_it()
-        If length of password is unknown, pass the callable into a range:
-                crack_it = ZipCrack('protected.zip')
-                for i in range(8,17):
-                    crack_it(i)
+    """Attempts to brute-force an encrypted zip file
+    Usage:
+            'crack_it = ZipCrack('protected.zip', 8)
+            crack_it()'
+    If password length is unknown:
+            'crack_it = ZipCrack('protected.zip')
+            for i in range(8,17):
+                crack_it(i)'
     Args:
         Name of zip archive (file)
         Length of password (pw_length)
     """
-    processor = ZipFile
-    extraction = ZipFile.extractall
-
+   
     def __init__(self, file=None, pw_length=None):
         super().__init__(file, pw_length)
+        self.processor = ZipFile
+        self.extractor = ZipFile(self.file).extractall
 
     def __call__(self,length=None):
-        """Making callable for quick use during iteration of pw_lengths"""
+        """Allows calling with file + pw_length or 
+        length only, for iterating over possible pw_lengths
+         """
         length = length or self.pw_length
-        self.zippedContents(self.file)
-        extractor = ZipCrack.processor(self.file).extractall
-        self.brute_force(self.file, length, processor=ZipCrack.processor, extractor=extractor)
+        self.get_contents(self.file)
+        self.try_brute(length)
 
-    def zippedContents(self, file):
-        """Obtain a list of files within the archive"""
+    def get_contents(self, file):
+        """Sets files within the archive to self.contents"""
         zipped = ZipFile(file)  
         contents = zipped.namelist()
         zipped.close()
         self.contents = contents
 
-    def zip_crack(self, file, length):
-        """Allows calling decryption attack directly with filename and pw length"""
-        self.file = file
-        self.zippedContents(file)
-        extract = ZipCrack.processor(self.file).extractall
-        self.brute_force(self.file, length, processor=ZipCrack.processor, extract=extract)
+    def try_brute(self, length):
+        """Main engine.  Attempts brute force and returns results."""
+        pw = self.brute_force(self.file, length, self.processor, self.extractor)
+        if pw:
+            print(f'Password identified: {pw}\n')
+            self.reader(self.contents)
+            return pw
+        else:
+            print('Password not discovered on this iteration.')
+            return None
 
     def reader(self, filelist):
         """Reads unzipped file to terminal"""
@@ -101,17 +105,13 @@ class ZipCrack(PasswordCrack):
                 print(f"Filename: {file} \n")
                 print(f.read(), '\n')
 
-    #def extract(zipfile_instance,pw):
-    #    print(zipfile_instance.extractall(pwd=pw))
-    #    return zipfile_instance.extractall(pwd=pw)
-
-
-
 class PDFCrack(PasswordCrack):
-    processor = 'pdf or whatever'
 
     def __init__(self, file=None, pw_length=None):
         super().__init__(file, pw_length)
+        self.processor = 'pdf or whatever'
+        self.extractor = 'pdf extracting method'
+
 
     def __call__(self, pw_length=None):
         pw_length = pw_length or self.pw_length
@@ -120,7 +120,7 @@ class PDFCrack(PasswordCrack):
     def pdf_info(self):
         pass
 
-    def pdf_crack(self):
+    def try_brute(self):
         pass
 
     def reader(self):

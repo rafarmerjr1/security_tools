@@ -18,18 +18,20 @@ class TestZip:
 
     
 # Quick Test
+# Replace with real unittests soon
+
 if __name__ == '__main__':
     def test():
-        crack=ZipCrack()
         TestZip.test_zip('bcb')
-        crack.zip_crack('zippedTest.zip',3)
+        crack=ZipCrack('zippedTest.zip',3)
+        crack()
 
     # testing callable instance
     def iter_test():
-        crack=ZipCrack('zippedTest.zip')
         TestZip.test_zip('bcb')
+        crack=ZipCrack('zippedTest.zip')
         sleep(1)
         for i in range(2,4):
             crack(i)
-    #test()
-    iter_test()
+    test()
+    #iter_test()
