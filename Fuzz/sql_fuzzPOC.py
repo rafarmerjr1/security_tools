@@ -33,7 +33,7 @@ class UNION_fuzz_POC:
                 print(f"\nUnion Length: {i}\n")
                 print(f"Union Query: {payload}")
                 return self.parse(resp)
-                break
+                
 
     def parse(self, resp):
         credentials = json.loads(resp)
